@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "dev": "nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -15,5 +16,12 @@
   "bugs": {
     "url": "https://github.com/gjjrpin/GJ-Pineda-brainflix-api/issues"
   },
-  "homepage": "https://github.com/gjjrpin/GJ-Pineda-brainflix-api#readme"
+  "homepage": "https://github.com/gjjrpin/GJ-Pineda-brainflix-api#readme",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.21"
+  }
 }
