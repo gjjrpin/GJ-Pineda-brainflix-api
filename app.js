@@ -13,7 +13,12 @@ const videos_route = require("./routes/videos.js");
 app.use(express.urlencoded({ extended: false }));
 // used to parse/read json
 app.use(express.json());
+//This is linked to the photos
+// This allows us to use absolute path
+app.use(express.static("public"));
+
 app.use(videos_route);
+
 
 // This is essentially running the whole server.
 // ALWAYS HAVE THIS AT THE BOTTOM.

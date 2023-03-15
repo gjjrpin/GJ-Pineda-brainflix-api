@@ -1,12 +1,22 @@
 //const data = require("../data/videos.json");
 const fs = require("fs");
 
+const { v4: uuidv4 } = require("uuid");
+
 const path = require("path");
 
 const express = require("express");
 
 // We are using router here to manage the endpoint.
 const router = express.Router();
+
+// These are examples of REST API.
+// videos
+// GET /videos
+// GET /videos/:id
+// POST /videos
+// PUT /videos/:id
+// DELETE /videos/:id
 
 // -----------------GET /VIDEOS---------------------------------------
 // Notice how we use "router.get" instead of "app.get"
@@ -28,26 +38,36 @@ router.get("/videos", (req, res) => {
 // we are making an endpoint for the client to give us data.
 router.post("/videos", (req, res) => {
   // we are expecting a title and description.
-  const { title, description } = req.body; //payload from client.
+  const { title, channel } = req.body; //payload from client.
 
   // 1. Read file
   const videos = JSON.parse(
     fs.readFileSync(path.resolve(__dirname, "../data/videos.json"), "utf8")
   );
 
+  // 2. create new data
+  const newVideo = {
+    id: uuidv4(),
+    title: title,
+    channel: channel,
+    image: "/assets/image0.jpeg",
+  };
+
   // The data we get from the client, we push it to the data file. ("../data/videos.json"))
-  // 2. Modify file.
-  videos.push({ title, description });
+  // 3. Modify file.
+  videos.push(newVideo);
   const updated_videos = JSON.stringify(videos);
 
-  // 3. Override old file (save)
+  // 4. Override old file (save)
+  //This is where we are writing it.
   fs.writeFileSync(
     path.resolve(__dirname, "../data/videos.json"),
     updated_videos
   );
 
   // This sends a response to the client.
-  res.send({ title, description });
+  // This includes the id this time.
+  res.send(newVideo);
 });
 
 // --------------GET /VIDEOS/:ID------------------------------------------
