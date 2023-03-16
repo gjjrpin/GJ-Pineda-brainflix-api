@@ -1,4 +1,8 @@
+// http://localhost:3000/videos THIS IS HOW YOU ACCESS BACKEND.
+
 //const data = require("../data/videos.json");
+// This is fs (file system). It is being used to have the computer modify a file.
+// In our case, we are modifying out videos.json
 const fs = require("fs");
 
 const { v4: uuidv4 } = require("uuid");
@@ -23,6 +27,9 @@ const router = express.Router();
 // req= What's calling the api endpoint. res= the message.
 // HTTP method: "GET"
 router.get("/videos", (req, res) => {
+  // Uncomment the console log to see where the api key is coming from.
+  // console.log(req.query);
+
   // JSON.parse turns everything in the brackets to a JSON file.
   // This needs an absolute path, therefore, we use path.resolve.
   const videos = JSON.parse(
@@ -41,27 +48,42 @@ router.post("/videos", (req, res) => {
   const { title, channel } = req.body; //payload from client.
 
   // 1. Read file
+  // json.parse turns videos from string to JSON.
+  // with that, we are able to push data into it. The data we are pushing is in #2.
+  // utf8 is the type of characters stored in the json file. (English)
   const videos = JSON.parse(
     fs.readFileSync(path.resolve(__dirname, "../data/videos.json"), "utf8")
   );
 
   // 2. create new data
+  // This is the data received from the front end.
+  // we are pushing the newVideos object to #3.
   const newVideo = {
     id: uuidv4(),
     title: title,
     channel: channel,
-    image: "/assets/image0.jpeg",
+    image: "/assets/image0.jpeg", 
+    description: "",
+    views: "0",
+    likes: "0",
+    duration: "",
+    video: "",
+    timestamp: new Date(),
+    comments: [],
   };
 
   // The data we get from the client, we push it to the data file. ("../data/videos.json"))
   // 3. Modify file.
   videos.push(newVideo);
+  // This is stringify because by default fs.writeFile requires a string.
   const updated_videos = JSON.stringify(videos);
 
   // 4. Override old file (save)
   //This is where we are writing it.
   fs.writeFileSync(
+    // This is the absolute path to videos.json.
     path.resolve(__dirname, "../data/videos.json"),
+    // This is the payload.
     updated_videos
   );
 
